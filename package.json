@@ -16,7 +16,7 @@
     "react-dom": "18.2.0"
   },
   
-    "proxy":"https://demo-fetch.vercel.app/"
+    "proxy":"https://cors-anywhere.herokuapp.com/"
 
   
 }
