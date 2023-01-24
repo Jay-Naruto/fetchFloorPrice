@@ -23,12 +23,12 @@ setLoading(0)
 
 
 var requestOptions = {
-//   headers:{
+  headers:{
 
-//     "Access-Control-Allow-Origin" : "*", 
-// "Access-Control-Allow-Credentials" : true ,
-// "Content-Type": "application/json",
-//   },
+    "Access-Control-Allow-Origin" : "*", 
+"Access-Control-Allow-Credentials" : true ,
+"Content-Type": "application/json",
+  },
 //   mode:'no-cors',
   method: 'GET',
   redirect: 'follow'
