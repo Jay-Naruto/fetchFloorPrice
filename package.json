@@ -16,7 +16,7 @@
     "react-dom": "18.2.0"
   },
   
-    "proxy":"https://api-devnet.magiceden.dev/v2/collections/runcible/stats"
+    "proxy":"https://demo-fetch.vercel.app/"
 
   
 }

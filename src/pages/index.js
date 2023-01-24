@@ -20,19 +20,23 @@ setLoading(0)
     setLoading(1)
 
     setTimeout(async()=>{
-//       headers:{
-//         "Access-Control-Allow-Origin" : "*", 
-// "Access-Control-Allow-Credentials" : true ,
-// "Content-Type": "application/json",
-//       }
+
 
 var requestOptions = {
+//   headers:{
+
+//     "Access-Control-Allow-Origin" : "*", 
+// "Access-Control-Allow-Credentials" : true ,
+// "Content-Type": "application/json",
+//   },
+//   mode:'no-cors',
   method: 'GET',
   redirect: 'follow'
 };
 
-fetch(`https://api-devnet.magiceden.dev/v2/collections/${input.toLowerCase().replace(/ /g,"_")}/stats`, requestOptions)
-  .then(response => response.text())
+fetch(`https://api-mainnet.magiceden.dev/v2/collections/${input.toLowerCase().replace(/ /g,"_")}/stats`, requestOptions)
+// fetch(`https://api.coralcube.io/v1/getCollections?offset=0&page_size=20&name=${input.toLowerCase().replace(/ /g,"_")}`,requestOptions)
+  .then(response => response.json())
   .then(result => {console.log(result);setFetchFlprice(result.floorPrice)})
   .catch(error => setErr(error));
 
@@ -44,7 +48,10 @@ fetch(`https://api-devnet.magiceden.dev/v2/collections/${input.toLowerCase().rep
      setInput(str.toLowerCase());
      console.log(str.toLowerCase())
  }
-
+useEffect(()=>{
+  setFetchFlprice("")
+  setInput("")
+},[])
   return (
     <>
       <Head>
@@ -72,12 +79,12 @@ fetch(`https://api-devnet.magiceden.dev/v2/collections/${input.toLowerCase().rep
           </div>
           <div  className='imgContainer'>
             {
-              loading  && fetchFlprice ?
+               fetchFlprice ?
               <>
             <div>
              
               <h1 className='result'>
-              Floor price:&nbsp;{fetchFlprice}
+              Floor price:&nbsp;{fetchFlprice/1000000000}&nbsp;SOL
 
               </h1>
             </div>
