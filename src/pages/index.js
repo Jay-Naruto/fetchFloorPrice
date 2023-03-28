@@ -3,6 +3,8 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 import { useEffect, useState } from 'react'
+import Moralis from 'moralis'
+import { SolNetwork } from '@moralisweb3/common-sol-utils'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -19,39 +21,75 @@ setLoading(0)
   const fetchFlp=async()=>{
     setLoading(1)
 
-    setTimeout(async()=>{
 
+    }
 
-var requestOptions = {
-  headers:{
-
-//     "Access-Control-Allow-Origin" : "*", 
-// "Access-Control-Allow-Credentials" : true ,
-// "Content-Type": "application/json",
-  },
-//   mode:'no-cors',
-  method: 'GET',
-  redirect: 'follow'
-};
-
-fetch(`https://api-mainnet.magiceden.dev/v2/collections/${input.toLowerCase().replace(/ /g,"_")}/stats`, requestOptions)
-// fetch(`https://api.coralcube.io/v1/getCollections?offset=0&page_size=20&name=${input.toLowerCase().replace(/ /g,"_")}`,requestOptions)
-  .then(response => response.json())
-  .then(result => {console.log(result);setFetchFlprice(result.floorPrice)})
-  .catch(error => setErr(error));
-
-}
-    )}
-  function removeSpace(str)
-  {
-     str = str.replace(/\s/g,'')
-     setInput(str.toLowerCase());
-     console.log(str.toLowerCase())
- }
 useEffect(()=>{
   setFetchFlprice("")
   setInput("")
 },[])
+
+const [address, setAddress] = useState();
+const [name, setName] = useState();
+const [image, setImage] = useState();
+const [load, setLoad] = useState(0);
+const [mut, setMut] = useState(Boolean);
+
+
+const [data,setData]=useState({})
+
+useEffect(()=>{
+  async()=>{
+    await Moralis.start({
+      apiKey: "PGlnVQ8yt3MBa0OAjrVwbFTuVNaOYTvAs4lkunaQWWhartWxLEqD3gSgvpr7LKeo",
+    });
+  }
+},[])
+const runApp = async (ad) => {
+
+  
+  const address = ad;
+
+  const network = SolNetwork.MAINNET;
+
+  const response = await Moralis.SolApi.nft.getNFTMetadata({
+    address,
+    network,
+  });
+  
+  setData(response.toJSON());
+  setMut(response.toJSON().metaplex.isMutable)
+  fetch(`https://api-mainnet.magiceden.dev/v2/collections/${response.toJSON().name.toLowerCase().replace(/ /g,"_")}/stats`,
+  {
+  method: 'GET',
+  redirect: 'follow',
+  }
+  )
+    .then(response => response.json())
+    .then(result => {console.log(result);setFetchFlprice(result.floorPrice)})
+    .catch(error => setErr(error));
+  
+  try{
+    await fetch(response.toJSON().metaplex.metadataUri)
+    .then((res)=>res.json())
+    .then((data)=>{
+      setImage(data.image);
+    
+
+      // console.log(data.image)
+      setLoad(1)
+    });
+
+
+
+  }
+  catch(err)
+  {
+    console.log(err)
+  }
+  console.log(response.toJSON())
+
+}
   return (
     <>
       <Head>
@@ -61,48 +99,35 @@ useEffect(()=>{
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className='container'>
-          <div>
-            <span className='note'>Enter name of the NFT</span>
-          </div>
-          <div className='btnContainer'>
-          <input className='inputField' name='input' 
-            onKeyDown={event => {
-              if (event.key === 'Enter') {
-                fetchFlp()
-              }
-            }}
-          onChange={(e)=>setInput(e.target.value) } value={input}></input>
-           <button className='fetchBtn' onClick={()=>{fetchFlp();}}>
-            Click
-           </button>
-          </div>
-          <div  className='imgContainer'>
-            {
-               fetchFlprice ?
-              <>
-            <div>
-             
-              <h1 className='result'>
-              Floor price:&nbsp;{fetchFlprice/1000000000}&nbsp;SOL
 
-              </h1>
-            </div>
-              </>
-              :
-              <div>
-             
-              <h3 className='result'>
-             
+        <>
+      <div
+        style={{
+          
+          backgroundSize: "cover",
+          height: "100vh",
+        }}
+      >
+  
+        <div className="content">
+          <input
+            style={{width: "350px", height: "20px"}}
+            type="text"
+            onChange={(e) => setAddress(e.target.value)}
+          ></input>
+          <div className="search" onClick={() => runApp(address)}>Get NFT</div>
+          {data && <div className="name">name={data.name}</div>}
+          {data && <div className="name">mint={data.mint}</div>}
+          {/* {load && 
+            <img className='fetchimage' src={image} alt="/"/>
+        } */}
+          {data.metaplex && <div className="name">metadata={data.metaplex.metadataUri}</div>}
+          {mut && <div className="name">mutable={mut.toString()}</div>}
+          {data && <div className="name">floorPrice={fetchFlprice/1000000000} SOL</div>}
 
-              </h3>
-            </div>
-            }
-        
-
-          </div>
         </div>
-
+      </div>
+    </>
       </main>
     </>
   )

@@ -157,3 +157,29 @@ body{
   color: white;
   margin-top: 10px;
 }
+.search {
+  border-radius: 1000px;
+  height: 40px;
+  width: 200px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to left top, #9945FF, #14F195);
+  font-weight: 500;
+  font-size: 18px;
+  margin: 30px;
+  color: white;
+}
+
+.search:hover {
+  cursor: pointer;
+}
+.fetchimg{
+  width: 300px;
+}
+.name {
+  margin: 20px;
+  font-weight: 500;
+  color: white;
+  font-size: 24px;
+}

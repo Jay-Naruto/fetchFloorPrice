@@ -2,7 +2,6 @@
   "name": "fetchflp",
   "version": "0.1.0",
   "private": true,
- 
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@moralisweb3/common-sol-utils": "^2.12.0",
+    "@moralisweb3/next": "^2.12.0",
     "@next/font": "13.1.2",
+    "moralis": "^2.12.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.0.1",
     "next": "13.1.2",
+    "next-connect": "^0.13.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-moralis": "^1.4.2"
   },
-  
-    "proxy":"https://cors-anywhere.herokuapp.com/"
-
-  
+  "proxy": "https://cors-anywhere.herokuapp.com/"
 }
